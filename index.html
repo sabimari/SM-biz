@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SmBiz — Smart Repair Management</title>
+<style>
+:root{
+  --bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#6d7688;--line:#e5e9f0;
+  --blue:#1769ff;--blue2:#0d4fd8;--green:#10a96b;--orange:#f59e0b;--red:#ef4444;
+  --dark:#101827;--shadow:0 12px 30px rgba(24,39,75,.08);--radius:16px
+}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.hidden{display:none!important}.app{min-height:100vh}.login{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(135deg,#07111f,#14233b)}
+.login-card{width:min(430px,100%);background:#fff;border-radius:24px;padding:34px;box-shadow:0 25px 70px rgba(0,0,0,.28)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:25px}.logo-mark{width:42px;height:42px;border-radius:12px;background:#101827;color:#fff;display:grid;place-items:center;font-weight:900}.logo-mark span{color:#1d70ff}
+.sub{color:var(--muted);font-size:13px}.login h1{margin:28px 0 6px;font-size:27px}.field{margin:14px 0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;outline:none;background:#fff}.field input:focus,.field select:focus,.field textarea:focus{border-color:#7aa8ff;box-shadow:0 0 0 3px rgba(23,105,255,.1)}
+.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:700}.primary{background:var(--blue);color:#fff}.primary:hover{background:var(--blue2)}.secondary{background:#eef3fb;color:#1d4d9c}.danger{background:#feecec;color:#b91c1c}.ghost{background:transparent;color:var(--muted)}
+.login .btn{width:100%;margin-top:8px}.demo{margin-top:18px;background:#f7f9fc;padding:12px;border-radius:12px;font-size:12px;color:var(--muted)}
+
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}.sidebar{background:#0e1726;color:#dce5f4;padding:18px 14px;position:sticky;top:0;height:100vh}.brand{padding:8px 10px 22px}.brand .logo-mark{background:#fff;color:#111}.brand .logo-mark span{color:#1769ff}.brand small{display:block;color:#8290a6;margin-top:4px;margin-left:52px;font-size:10px}
+.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#aeb9ca;text-align:left;padding:11px 12px;border-radius:10px;display:flex;gap:10px;align-items:center;font-weight:600}.nav button.active,.nav button:hover{background:#1769ff;color:#fff}.nav-icon{width:20px;text-align:center}
+.sidebar-bottom{position:absolute;bottom:16px;left:14px;right:14px;border-top:1px solid #263247;padding-top:12px}.user-mini{display:flex;gap:9px;align-items:center;font-size:12px}.avatar{width:34px;height:34px;border-radius:50%;background:#dbeafe;color:#1754b8;display:grid;place-items:center;font-weight:800}
+
+.main{min-width:0}.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:0 26px;position:sticky;top:0;z-index:5}.search{flex:1;max-width:580px;position:relative}.search input{width:100%;border:1px solid var(--line);background:#f8fafc;padding:10px 14px 10px 38px;border-radius:10px}.search span{position:absolute;left:13px;top:9px;color:#8993a5}.top-actions{margin-left:auto;display:flex;gap:8px;align-items:center}.role-pill{font-size:11px;background:#edf4ff;color:#1754b8;padding:6px 9px;border-radius:20px;font-weight:800}
+.content{padding:24px;max-width:1500px;margin:auto}.page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.page-head h1{margin:0;font-size:24px}.page-head p{margin:5px 0 0;color:var(--muted);font-size:13px}.actions{display:flex;gap:8px;flex-wrap:wrap}
+
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.stat{padding:17px}.stat-top{display:flex;justify-content:space-between;align-items:center}.stat-icon{width:34px;height:34px;border-radius:10px;background:#edf4ff;color:#1769ff;display:grid;place-items:center}.stat small{color:var(--muted);font-size:12px}.stat strong{display:block;font-size:25px;margin-top:8px}.trend{font-size:11px;color:var(--green);font-weight:700}
+
+.grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-top:16px}.panel{padding:18px}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.panel-head h3{margin:0;font-size:15px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:12px}.table th{color:#788297;text-align:left;font-weight:700;background:#fafbfc}.table th,.table td{padding:11px 9px;border-bottom:1px solid var(--line);white-space:nowrap}.status{display:inline-block;padding:5px 8px;border-radius:20px;font-size:10px;font-weight:800}.repairing{background:#eaf2ff;color:#1d5ed7}.checking{background:#fff4dc;color:#a16207}.ready{background:#e7f9ef;color:#087a4b}.completed{background:#e9f8f1;color:#087a4b}.received{background:#f0f2f5;color:#596273}.cancelled{background:#feecec;color:#b91c1c}
+
+.bar-chart{height:210px;display:flex;align-items:end;gap:9px;padding:15px 5px 5px}.bar{flex:1;background:#cfe0ff;border-radius:7px 7px 2px 2px;min-height:12px;position:relative}.bar b{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:9px;color:#8a94a6}.bar em{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:9px;color:#687387;font-style:normal}
+.list{display:grid;gap:10px}.list-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}.list-item:last-child{border-bottom:0}.dot{width:9px;height:9px;border-radius:50%;background:var(--blue);margin-top:5px}.list-item strong{font-size:12px}.list-item p{margin:3px 0 0;color:var(--muted);font-size:11px}
+
+.section-card{padding:18px;margin-bottom:16px}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.toolbar input,.toolbar select{border:1px solid var(--line);padding:10px;border-radius:9px;background:#fff}.toolbar input{min-width:220px}.empty{text-align:center;color:var(--muted);padding:40px 10px}
+
+.modal{position:fixed;inset:0;background:rgba(8,15,28,.52);display:grid;place-items:center;padding:20px;z-index:30}.modal-box{background:#fff;width:min(650px,100%);max-height:90vh;overflow:auto;border-radius:18px;padding:22px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.modal-head h2{margin:0;font-size:19px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+
+.timeline{display:grid;gap:0}.step{display:grid;grid-template-columns:30px 1fr;min-height:55px}.step-icon{width:22px;height:22px;border-radius:50%;background:#1769ff;color:#fff;display:grid;place-items:center;font-size:11px;z-index:1}.step:not(:last-child) .step-icon:after{content:"";position:absolute;width:2px;height:38px;background:#cfe0ff;margin-top:55px}.step small{color:var(--muted);font-size:10px}.step strong{font-size:12px}.invoice{border:1px solid var(--line);border-radius:12px;padding:18px;background:#fff}.invoice-row{display:flex;justify-content:space-between;padding:8px 0;font-size:12px}.invoice-total{border-top:1px solid var(--line);margin-top:8px;padding-top:12px;font-size:17px;font-weight:800}
+.toast{position:fixed;right:20px;bottom:20px;background:#101827;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);z-index:50;font-size:12px}
+.mobile-menu{display:none}
+
+@media(max-width:1000px){.shell{grid-template-columns:76px 1fr}.brand-text,.sidebar small,.nav button span:last-child,.sidebar-bottom .user-mini div{display:none}.brand{padding:8px 3px 22px}.nav button{justify-content:center}.sidebar-bottom{left:8px;right:8px}.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+@media(max-width:700px){.shell{display:block}.sidebar{position:fixed;left:-260px;width:240px;z-index:20;transition:.2s}.sidebar.open{left:0}.topbar{padding:0 14px}.mobile-menu{display:block}.content{padding:15px}.cards{grid-template-columns:1fr 1fr;gap:9px}.stat{padding:13px}.stat strong{font-size:20px}.form-grid{grid-template-columns:1fr}.top-actions .role-pill{display:none}.search{max-width:none}.table th,.table td{padding:9px 7px}}
+@media(max-width:420px){.cards{grid-template-columns:1fr}.page-head{align-items:flex-start;flex-direction:column}.actions{width:100%}.actions .btn{flex:1}}
+</style>
+</head>
+<body>
+
+<div id="loginView" class="login">
+  <div class="login-card">
+    <div class="logo"><div class="logo-mark">S<span>M</span></div><div>SmBiz<div class="sub">Smart Repair Management</div></div></div>
+    <h1>Welcome back</h1>
+    <div class="sub">Manage. Repair. Grow.</div>
+    <div class="field"><label>Email or Phone</label><input id="loginId" value="owner@smbiz.in" /></div>
+    <div class="field"><label>Password</label><input id="loginPass" type="password" value="123456" /></div>
+    <button class="btn primary" onclick="login()">Login</button>
+    <div class="demo"><b>Demo:</b> owner@smbiz.in / 123456<br>Owner sees revenue. Technician mode hides revenue.</div>
+  </div>
+</div>
+
+<div id="appView" class="app hidden">
+<div class="shell">
+<aside id="sidebar" class="sidebar">
+  <div class="brand">
+    <div class="logo"><div class="logo-mark">S<span>M</span></div><div class="brand-text">SmBiz</div></div>
+    <small>Smart Repair Management</small>
+  </div>
+  <nav class="nav" id="nav">
+    <button data-page="dashboard" class="active" onclick="go('dashboard')"><span class="nav-icon">⌂</span><span>Dashboard</span></button>
+    <button data-page="customers" onclick="go('customers')"><span class="nav-icon">♙</span><span>Customers</span></button>
+    <button data-page="repairs" onclick="go('repairs')"><span class="nav-icon">⚙</span><span>Repairs</span></button>
+    <button data-page="stock" onclick="go('stock')"><span class="nav-icon">▣</span><span>Stock</span></button>
+    <button data-page="purchase" onclick="go('purchase')"><span class="nav-icon">＋</span><span>Purchase</span></button>
+    <button data-page="suppliers" onclick="go('suppliers')"><span class="nav-icon">♟</span><span>Suppliers</span></button>
+    <button data-page="billing" onclick="go('billing')"><span class="nav-icon">▤</span><span>Billing</span></button>
+    <button data-page="reports" onclick="go('reports')"><span class="nav-icon">◔</span><span>Reports</span></button>
+    <button data-page="notifications" onclick="go('notifications')"><span class="nav-icon">♢</span><span>Notifications</span></button>
+    <button data-page="settings" onclick="go('settings')"><span class="nav-icon">⚙</span><span>Settings</span></button>
+  </nav>
+  <div class="sidebar-bottom"><div class="user-mini"><div class="avatar">S</div><div><b id="userName">Owner</b><br><span class="sub" id="userRole">Owner</span></div></div></div>
+</aside>
+
+<main class="main">
+<header class="topbar">
+  <button class="btn ghost mobile-menu" onclick="toggleMenu()">☰</button>
+  <div class="search"><span>⌕</span><input id="globalSearch" placeholder="Search customer, device, IMEI, job ID..." oninput="globalSearch(this.value)"></div>
+  <div class="top-actions"><span class="role-pill" id="rolePill">OWNER</span><button class="btn secondary" onclick="logout()">Logout</button></div>
+</header>
+<section id="content" class="content"></section>
+</main>
+</div>
+</div>
+
+<div id="modal" class="modal hidden" onclick="if(event.target===this)closeModal()"><div id="modalBox" class="modal-box"></div></div>
+<div id="toast" class="toast hidden"></div>
+
+<script>
+const seed={
+ customers:[
+  {id:1,name:"Riyas",phone:"9876543210",device:"iPhone 13",imei:"359766543210987",repairs:3},
+  {id:2,name:"Fathima",phone:"8123456789",device:"Samsung A37",imei:"358123456789123",repairs:2},
+  {id:3,name:"Najeeb",phone:"9401234567",device:"Redmi 9A",imei:"869123456789456",repairs:1},
+  {id:4,name:"Afsal",phone:"9654321090",device:"iPhone 12",imei:"356987654321234",repairs:4},
+  {id:5,name:"Shahana",phone:"7901234567",device:"Vivo V40",imei:"864567890123456",repairs:2}
+ ],
+ repairs:[
+  {id:"SMB-000245",customer:"Riyas",phone:"9876543210",device:"iPhone 13",complaint:"Touch not working",status:"Repairing",tech:"Ameen",date:"12 Sep 2025",amount:5000},
+  {id:"SMB-000244",customer:"Fathima",phone:"8123456789",device:"Samsung A37",complaint:"Charging issue",status:"Checking",tech:"Shan",date:"12 Sep 2025",amount:1800},
+  {id:"SMB-000243",customer:"Najeeb",phone:"9401234567",device:"Redmi 9A",complaint:"No power",status:"Received",tech:"Fahad",date:"11 Sep 2025",amount:1200},
+  {id:"SMB-000242",customer:"Afsal",phone:"9654321090",device:"iPhone 12",complaint:"Display issue",status:"Ready",tech:"Shan",date:"11 Sep 2025",amount:4500}
+ ],
+ stock:[
+  {id:1,part:"Display",model:"iPhone 13",qty:5,price:4500},
+  {id:2,part:"Battery",model:"iPhone 13",qty:8,price:1800},
+  {id:3,part:"Charging Port",model:"Samsung A37",qty:12,price:750},
+  {id:4,part:"Camera",model:"iPhone 12",qty:4,price:2200},
+  {id:5,part:"Flex Cable",model:"Redmi 9A",qty:15,price:350},
+  {id:6,part:"Back Cover",model:"Vivo V40",qty:6,price:600}
+ ],
+ suppliers:[
+  {id:1,name:"Mobile Parts Hub",phone:"9000000011",items:"Displays, batteries"},
+  {id:2,name:"Smart Spare World",phone:"9000000022",items:"Ports, flex cables"}
+ ],
+ notifications:[
+  {title:"Low stock alert",text:"Battery (iPhone 13) — only 2 left",type:"warning",time:"2h ago"},
+  {title:"Repair ready",text:"SMB-000245 is ready for pickup",type:"success",time:"3h ago"},
+  {title:"Payment received",text:"Afsal — ₹2,500",type:"money",time:"5h ago"},
+  {title:"Warranty expiry",text:"iPhone 12 — expires in 5 days",type:"danger",time:"1d ago"}
+ ]
+};
+let db=JSON.parse(localStorage.getItem("smbiz_db")||"null")||seed;
+let currentUser=null,currentPage="dashboard";
+
+function save(){localStorage.setItem("smbiz_db",JSON.stringify(db))}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function money(n){return "₹"+Number(n||0).toLocaleString("en-IN")}
+function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.remove("hidden");setTimeout(()=>x.classList.add("hidden"),2200)}
+function status(s){return `<span class="status ${s.toLowerCase()}">${esc(s)}</span>`}
+
+function login(){
+ const id=document.getElementById("loginId").value.trim();
+ const pass=document.getElementById("loginPass").value;
+ if((id==="owner@smbiz.in"||id==="owner"||id==="9876543210")&&pass==="123456"){currentUser={name:"Sabiq",role:"Owner"}}
+ else if(pass==="123456"){currentUser={name:"Technician",role:"Technician"}}
+ else {toast("Demo password is 123456");return}
+ document.getElementById("loginView").classList.add("hidden");
+ document.getElementById("appView").classList.remove("hidden");
+ document.getElementById("userName").textContent=currentUser.name;
+ document.getElementById("userRole").textContent=currentUser.role;
+ document.getElementById("rolePill").textContent=currentUser.role.toUpperCase();
+ go("dashboard");
+}
+function logout(){currentUser=null;document.getElementById("appView").classList.add("hidden");document.getElementById("loginView").classList.remove("hidden")}
+function toggleMenu(){document.getElementById("sidebar").classList.toggle("open")}
+function go(page){
+ currentPage=page;document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ document.getElementById("sidebar").classList.remove("open");
+ const views={dashboard:dashboard,customers:customers,repairs:repairs,stock:stock,purchase:purchase,suppliers:suppliers,billing:billing,reports:reports,notifications:notifications,settings:settings};
+ document.getElementById("content").innerHTML=views[page]();
+}
+
+function head(title,sub,button){return `<div class="page-head"><div><h1>${title}</h1><p>${sub}</p></div><div class="actions">${button||""}</div></div>`}
+function stat(label,value,icon,trend=""){return `<div class="card stat"><div class="stat-top"><small>${label}</small><div class="stat-icon">${icon}</div></div><strong>${value}</strong><span class="trend">${trend}</span></div>`}
+
+function dashboard(){
+ const revenue=db.repairs.reduce((a,r)=>a+r.amount,0);
+ return head("Dashboard","Good to see you. Here is your shop overview.","<button class='btn primary' onclick='openRepair()'>＋ New Repair</button>")+
+ `<div class="cards">
+ ${stat("Total Repairs",db.repairs.length,"⚙","+12% this month")}
+ ${stat("In Progress",db.repairs.filter(r=>["Repairing","Checking"].includes(r.status)).length,"◷","")}
+ ${stat("Ready for Pickup",db.repairs.filter(r=>r.status==="Ready").length,"✓","")}
+ ${currentUser.role==="Owner"?stat("Revenue",money(revenue),"₹","+8.4%"):stat("Completed",db.repairs.filter(r=>r.status==="Completed").length,"✓","")}
+ </div>
+ <div class="grid2">
+  <div class="card panel"><div class="panel-head"><h3>Repair Overview</h3><button class="btn ghost" onclick="go('reports')">View report →</button></div>
+   <div class="bar-chart">${[35,48,42,63,55,75,68,88,76,96,84,100].map((h,i)=>`<div class="bar" style="height:${h}%"><em>${Math.round(h*.45)}</em><b>${i+1}</b></div>`).join("")}</div>
+  </div>
+  <div class="card panel"><div class="panel-head"><h3>Today's Summary</h3></div>
+   <div class="list">
+    ${summary("New Repairs",db.repairs.filter(r=>r.date==="12 Sep 2025").length,"＋")}
+    ${summary("Ready",db.repairs.filter(r=>r.status==="Ready").length,"✓")}
+    ${summary("Pending",db.repairs.filter(r=>!["Ready","Completed"].includes(r.status)).length,"◷")}
+   </div>
+  </div>
+ </div>
+ <div class="card panel" style="margin-top:16px"><div class="panel-head"><h3>Recent Repairs</h3><button class="btn ghost" onclick="go('repairs')">View all →</button></div>
+ ${repairTable(db.repairs.slice(0,6))}
+ </div>`;
+}
+function summary(a,b,c){return `<div class="list-item"><div class="dot">${c}</div><div><strong>${a}</strong><p>${b} jobs</p></div></div>`}
+
+function repairTable(rows){
+ if(!rows.length)return `<div class="empty">No repairs found.</div>`;
+ return `<div class="table-wrap"><table class="table"><thead><tr><th>Job ID</th><th>Customer</th><th>Device</th><th>Status</th><th>Technician</th><th>Date</th><th></th></tr></thead><tbody>${rows.map(r=>`<tr>
+ <td><b>${esc(r.id)}</b></td><td>${esc(r.customer)}<br><span class="sub">${esc(r.phone)}</span></td><td>${esc(r.device)}</td><td>${status(r.status)}</td><td>${esc(r.tech)}</td><td>${esc(r.date)}</td><td><button class="btn secondary" onclick="viewRepair('${r.id}')">View</button></td>
+ </tr>`).join("")}</tbody></table></div>`;
+}
+
+function customers(){
+ return head("Customer Management","Customers, devices and repair history.","<button class='btn primary' onclick='openCustomer()'>＋ Add Customer</button>")+
+ `<div class="card section-card"><div class="toolbar"><input id="customerFilter" placeholder="Search by name, phone, IMEI..." oninput="filterCustomers(this.value)"><button class="btn secondary" onclick="openCustomer()">Add Customer</button></div><div id="customerTable">${customerTable(db.customers)}</div></div>`;
+}
+function customerTable(rows){
+ return `<div class="table-wrap"><table class="table"><thead><tr><th>Name</th><th>Phone</th><th>Device</th><th>IMEI</th><th>Total Repairs</th><th></th></tr></thead><tbody>${rows.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.phone)}</td><td>${esc(c.device)}</td><td>${esc(c.imei)}</td><td>${c.repairs}</td><td><button class="btn secondary" onclick="customerDetails(${c.id})">Open</button></td></tr>`).join("")}</tbody></table></div>`;
+}
+function filterCustomers(q){q=q.toLowerCase();document.getElementById("customerTable").innerHTML=customerTable(db.customers.filter(c=>Object.values(c).join(" ").toLowerCase().includes(q)))}
+
+function repairs(){
+ return head("Repair Tracking","Track every job from receiving to delivery.","<button class='btn primary' onclick='openRepair()'>＋ New Repair</button>")+
+ `<div class="card section-card"><div class="toolbar"><input id="repairFilter" placeholder="Search job, customer, device..." oninput="filterRepairs(this.value)"><select id="statusFilter" onchange="filterRepairs(document.getElementById('repairFilter').value)"><option value="">All status</option><option>Received</option><option>Checking</option><option>Repairing</option><option>Ready</option><option>Completed</option></select></div><div id="repairTable">${repairTable(db.repairs)}</div></div>`;
+}
+function filterRepairs(q){q=(q||"").toLowerCase();let st=document.getElementById("statusFilter").value;document.getElementById("repairTable").innerHTML=repairTable(db.repairs.filter(r=>(!st||r.status===st)&&Object.values(r).join(" ").toLowerCase().includes(q)))}
+
+function stock(){
+ return head("Stock & Inventory","Track spare parts, models, quantity and price.","<button class='btn primary' onclick='openStock()'>＋ Add Stock</button>")+
+ `<div class="card section-card"><div class="toolbar"><input id="stockFilter" placeholder="Search part or model..." oninput="filterStock(this.value)"><select onchange="filterStock(document.getElementById('stockFilter').value,this.value)"><option value="">All stock</option><option value="low">Low stock</option></select></div><div id="stockTable">${stockTable(db.stock)}</div></div>`;
+}
+function stockTable(rows){
+ return `<div class="table-wrap"><table class="table"><thead><tr><th>Part</th><th>Model</th><th>Qty</th><th>Price</th><th>Value</th><th>Action</th></tr></thead><tbody>${rows.map(s=>`<tr><td><b>${esc(s.part)}</b></td><td>${esc(s.model)}</td><td>${s.qty} ${s.qty<=2?status("Low"):""}</td><td>${money(s.price)}</td><td>${money(s.qty*s.price)}</td><td><button class="btn secondary" onclick="editStock(${s.id})">Edit</button></td></tr>`).join("")}</tbody></table></div>`;
+}
+function filterStock(q,mode=""){q=(q||"").toLowerCase();document.getElementById("stockTable").innerHTML=stockTable(db.stock.filter(s=>(!mode||s.qty<=2)&&Object.values(s).join(" ").toLowerCase().includes(q)))}
+
+function purchase(){return head("Purchase","Record incoming spare-part purchases.","<button class='btn primary' onclick='openPurchase()'>＋ New Purchase</button>")+`<div class="grid2"><div class="card panel"><div class="panel-head"><h3>Purchase Workflow</h3></div><div class="list">${["Choose supplier","Add spare parts","Enter quantities & cost","Update inventory","Save purchase invoice"].map((x,i)=>summary(x,i+1,"✓")).join("")}</div></div><div class="card panel"><div class="panel-head"><h3>Quick Purchase</h3></div><p class="sub">Use this module to keep stock and supplier records connected.</p><button class="btn primary" onclick="openPurchase()">Create Purchase</button></div></div>`}
+function suppliers(){return head("Suppliers","Manage spare-part suppliers and contact details.","<button class='btn primary' onclick='openSupplier()'>＋ Add Supplier</button>")+`<div class="card section-card"><div class="table-wrap"><table class="table"><thead><tr><th>Supplier</th><th>Phone</th><th>Items</th><th></th></tr></thead><tbody>${db.suppliers.map(s=>`<tr><td><b>${esc(s.name)}</b></td><td>${esc(s.phone)}</td><td>${esc(s.items)}</td><td><button class="btn secondary" onclick="toast('Supplier details ready for editing')">Edit</button></td></tr>`).join("")}</tbody></table></div></div>`}
+
+function billing(){
+ if(currentUser.role!=="Owner")return head("Billing & Printing","Technician access is limited.","")+`<div class="card panel"><div class="empty">Billing totals and revenue are hidden for technician accounts.</div></div>`;
+ const r=db.repairs[0];return head("Billing & Printing","Create invoices and print/share them.","<button class='btn primary' onclick='printInvoice()'>🖨 Print Invoice</button>")+
+ `<div class="grid2"><div class="card panel"><div class="panel-head"><h3>Invoice Preview</h3></div><div class="invoice"><div class="invoice-row"><b>SmBiz</b><span>Invoice #INV-00021</span></div><div class="invoice-row"><span>Customer</span><b>${esc(r.customer)}</b></div><div class="invoice-row"><span>Device</span><b>${esc(r.device)}</b></div><div class="invoice-row"><span>Part / Service</span><b>Display + Labour</b></div><div class="invoice-row"><span>Service</span><b>${money(r.amount)}</b></div><div class="invoice-total"><div class="invoice-row"><span>Total</span><span>${money(r.amount)}</span></div></div><div class="invoice-row"><span>Payment</span><b style="color:var(--green)">PAID</b></div></div></div>
+ <div class="card panel"><div class="panel-head"><h3>Print Setup</h3></div><div class="list">${["A4 Printer","A5 Printer","Thermal Receipt Printer","Wi‑Fi Printer","Bluetooth Printer","USB Printer"].map(x=>summary(x,"Supported","✓")).join("")}</div></div></div>`;
+}
+function reports(){
+ if(currentUser.role!=="Owner")return head("Reports & Analytics","Owner-only financial reports.","")+`<div class="card panel"><div class="empty">Revenue and profit reports are hidden for technician accounts.</div></div>`;
+ const revenue=db.repairs.reduce((a,r)=>a+r.amount,0), expenses=12300;
+ return head("Reports & Analytics","Understand repairs, revenue and shop performance.","<button class='btn secondary' onclick='toast(\"Report exported\")'>Export Report</button>")+
+ `<div class="cards">${stat("Total Revenue",money(revenue),"₹","This period")}${stat("Total Expenses",money(expenses),"₹","This period")}${stat("Profit",money(Math.max(0,revenue-expenses)),"↗","Estimated")}${stat("Repair Count",db.repairs.length,"⚙","All jobs")}</div>
+ <div class="grid2"><div class="card panel"><div class="panel-head"><h3>Monthly Revenue</h3></div><div class="bar-chart">${[28,40,35,50,48,60,55,74,65,82,76,95].map((h,i)=>`<div class="bar" style="height:${h}%"><b>${i+1}</b></div>`).join("")}</div></div><div class="card panel"><div class="panel-head"><h3>Repair Mix</h3></div><div class="list">${summary("Repairs",62,"%")}${summary("Parts",24,"%")}${summary("Service",14,"%")}</div></div></div>`;
+}
+function notifications(){return head("Notifications & Alerts","Important events from your shop.","<button class='btn secondary' onclick='toast(\"All notifications marked read\")'>Mark all read</button>")+`<div class="card section-card"><div class="list">${db.notifications.map(n=>`<div class="list-item"><div class="dot"></div><div style="flex:1"><strong>${esc(n.title)}</strong><p>${esc(n.text)}</p></div><small>${esc(n.time)}</small></div>`).join("")}</div></div>`}
+function settings(){return head("Settings","Shop profile, users, permissions, security and data.","<button class='btn primary' onclick='saveSettings()'>Save Settings</button>")+`<div class="grid2"><div class="card panel"><h3>Shop Profile</h3><div class="field"><label>Shop Name</label><input id="shopName" value="SmBiz Mobile Repair"></div><div class="field"><label>Phone</label><input value="+91 9876543210"></div><div class="field"><label>Business Hours</label><input value="9:00 AM - 9:00 PM"></div><div class="field"><label>Currency</label><select><option>INR (₹)</option></select></div></div><div class="card panel"><h3>Security & Permissions</h3><div class="list">${["Owner","Manager","Technician"].map((x,i)=>summary(x,i===0?"Revenue + all access":i===1?"Operations access":"Repair + stock access","✓")).join("")}</div><button class="btn secondary" onclick="toast('Backup created locally')">Backup & Restore</button></div></div>`}
+
+function openModal(title,body){document.getElementById("modalBox").innerHTML=`<div class="modal-head"><h2>${title}</h2><button class="btn ghost" onclick="closeModal()">✕</button></div>${body}`;document.getElementById("modal").classList.remove("hidden")}
+function closeModal(){document.getElementById("modal").classList.add("hidden")}
+
+function openCustomer(){
+ openModal("Add Customer",`<div class="form-grid"><div class="field"><label>Name</label><input id="cName"></div><div class="field"><label>Phone</label><input id="cPhone"></div><div class="field"><label>Device</label><input id="cDevice" placeholder="iPhone 13"></div><div class="field"><label>IMEI</label><input id="cImei"></div></div><div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="addCustomer()">Save Customer</button></div>`);
+}
+function addCustomer(){const c={id:Date.now(),name:v("cName"),phone:v("cPhone"),device:v("cDevice"),imei:v("cImei"),repairs:0};if(!c.name||!c.phone)return toast("Name and phone are required");db.customers.unshift(c);save();closeModal();go("customers");toast("Customer added")}
+function customerDetails(id){const c=db.customers.find(x=>x.id===id);const rs=db.repairs.filter(r=>r.customer===c.name);openModal(c.name,`<p class="sub">${esc(c.phone)} · ${esc(c.device)} · IMEI ${esc(c.imei)}</p><h3>Repair History</h3>${repairTable(rs)}<div class="modal-actions"><button class="btn primary" onclick="closeModal();openRepair('${esc(c.name)}')">New Repair</button></div>`)}
+
+function openRepair(customerName=""){
+ openModal("Create Repair Job",`<div class="form-grid"><div class="field"><label>Customer</label><input id="rCustomer" value="${esc(customerName)}"></div><div class="field"><label>Phone</label><input id="rPhone"></div><div class="field"><label>Device</label><input id="rDevice" placeholder="iPhone / Samsung / Redmi"></div><div class="field"><label>Technician</label><input id="rTech" value="Ameen"></div><div class="field full"><label>Complaint</label><textarea id="rComplaint" rows="3"></textarea></div><div class="field"><label>Status</label><select id="rStatus"><option>Received</option><option>Checking</option><option>Repairing</option><option>Ready</option><option>Completed</option></select></div><div class="field"><label>Estimated Amount</label><input id="rAmount" type="number" value="0"></div></div><div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="addRepair()">Create Job</button></div>`);
+}
+function addRepair(){const r={id:"SMB-"+String(Math.floor(Math.random()*999999)).padStart(6,"0"),customer:v("rCustomer"),phone:v("rPhone"),device:v("rDevice"),complaint:v("rComplaint"),status:v("rStatus"),tech:v("rTech"),date:new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}),amount:Number(v("rAmount")||0)};if(!r.customer||!r.device)return toast("Customer and device are required");db.repairs.unshift(r);let c=db.customers.find(x=>x.name.toLowerCase()===r.customer.toLowerCase());if(c)c.repairs++;else db.customers.unshift({id:Date.now(),name:r.customer,phone:r.phone,device:r.device,imei:"",repairs:1});save();closeModal();go("repairs");toast("Repair job created")}
+function viewRepair(id){const r=db.repairs.find(x=>x.id===id);openModal("Repair Details",`<div class="invoice"><div class="invoice-row"><span>Job ID</span><b>${esc(r.id)}</b></div><div class="invoice-row"><span>Customer</span><b>${esc(r.customer)}</b></div><div class="invoice-row"><span>Device</span><b>${esc(r.device)}</b></div><div class="invoice-row"><span>Complaint</span><b>${esc(r.complaint)}</b></div><div class="invoice-row"><span>Technician</span><b>${esc(r.tech)}</b></div><div class="invoice-row"><span>Status</span><b>${status(r.status)}</b></div>${currentUser.role==="Owner"?`<div class="invoice-row"><span>Amount</span><b>${money(r.amount)}</b></div>`:""}</div><h3>Repair Timeline</h3><div class="timeline">${["Received","Checking","Repairing","Ready","Completed"].map((x,i)=>`<div class="step"><div class="step-icon">${i+1}</div><div><strong>${x}</strong><br><small>${i<=["Received","Checking","Repairing","Ready","Completed"].indexOf(r.status)?"Completed":"Pending"}</small></div></div>`).join("")}</div><div class="modal-actions"><button class="btn primary" onclick="closeModal()">Close</button></div>`)}
+function openStock(){
+ openModal("Add Stock",`<div class="form-grid"><div class="field"><label>Part Name</label><input id="sPart"></div><div class="field"><label>Model</label><input id="sModel"></div><div class="field"><label>Quantity</label><input id="sQty" type="number"></div><div class="field"><label>Unit Price</label><input id="sPrice" type="number"></div></div><div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="addStock()">Save Stock</button></div>`);
+}
+function addStock(){const s={id:Date.now(),part:v("sPart"),model:v("sModel"),qty:Number(v("sQty")),price:Number(v("sPrice"))};if(!s.part||!s.model)return toast("Part and model are required");db.stock.unshift(s);save();closeModal();go("stock");toast("Stock added")}
+function editStock(id){const s=db.stock.find(x=>x.id===id);openModal("Update Stock",`<div class="form-grid"><div class="field"><label>Part</label><input id="ePart" value="${esc(s.part)}"></div><div class="field"><label>Model</label><input id="eModel" value="${esc(s.model)}"></div><div class="field"><label>Quantity</label><input id="eQty" type="number" value="${s.qty}"></div><div class="field"><label>Price</label><input id="ePrice" type="number" value="${s.price}"></div></div><div class="modal-actions"><button class="btn danger" onclick="deleteStock(${id})">Delete</button><button class="btn primary" onclick="updateStock(${id})">Save</button></div>`)}
+function updateStock(id){const s=db.stock.find(x=>x.id===id);Object.assign(s,{part:v("ePart"),model:v("eModel"),qty:Number(v("eQty")),price:Number(v("ePrice"))});save();closeModal();go("stock");toast("Stock updated")}
+function deleteStock(id){db.stock=db.stock.filter(s=>s.id!==id);save();closeModal();go("stock");toast("Stock deleted")}
+function openPurchase(){openModal("New Purchase",`<div class="form-grid"><div class="field"><label>Supplier</label><select>${db.suppliers.map(s=>`<option>${esc(s.name)}</option>`).join("")}</select></div><div class="field"><label>Invoice No.</label><input></div><div class="field"><label>Part</label><input></div><div class="field"><label>Quantity</label><input type="number"></div></div><div class="modal-actions"><button class="btn primary" onclick="closeModal();toast('Purchase saved')">Save Purchase</button></div>`)}
+function openSupplier(){openModal("Add Supplier",`<div class="form-grid"><div class="field"><label>Name</label><input id="supName"></div><div class="field"><label>Phone</label><input id="supPhone"></div><div class="field full"><label>Items</label><input id="supItems"></div></div><div class="modal-actions"><button class="btn primary" onclick="addSupplier()">Save Supplier</button></div>`)}
+function addSupplier(){db.suppliers.push({id:Date.now(),name:v("supName"),phone:v("supPhone"),items:v("supItems")});save();closeModal();go("suppliers");toast("Supplier added")}
+function saveSettings(){toast("Settings saved")}
+function printInvoice(){window.print();toast("Print dialog opened")}
+function v(id){return document.getElementById(id)?.value.trim()||""}
+function globalSearch(q){if(!q)return;if(q.length>1){const found=[...db.customers.map(c=>c.name+" "+c.phone+" "+c.device),...db.repairs.map(r=>r.id+" "+r.customer+" "+r.device)].some(x=>x.toLowerCase().includes(q.toLowerCase()));if(found)toast("Match found — open Customers or Repairs")}}
+</script>
+</body>
+</html>
